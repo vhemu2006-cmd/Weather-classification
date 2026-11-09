@@ -1,0 +1,17 @@
+pip install pytest httpx --no-cache-dir
+
+
+Stage 9 — API Testing (tests/test_api.py)
+
+9.1  Test /health
+9.2  Test /metadata (model, preprocessor and label encoder loaded)
+9.3  Test valid /predict (label, probability, sorted top-3; null/missing precip_type)
+9.4  Test invalid /predict (summary, precip_type, humidity, wind bearing, timestamp, missing field)
+9.5  Test valid /predict/batch (incl. mixed timestamp formats)
+9.6  Test invalid /predict/batch
+9.7  Test multiple batch validation errors
+9.8  Test empty batch
+9.9  Test invalid datatypes / null numeric
+9.10 Test extreme valid and invalid values, malformed JSON, wrong structure, large batch
+
+Run everything:  pytest tests/test_api.py -v

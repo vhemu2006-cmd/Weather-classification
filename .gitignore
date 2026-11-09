@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# Data: keep only the original raw dataset in Git
+data/raw/*.csv
+!data/raw/weatherHistory.csv
+data/raw/*.lab9_backup
+data/raw/archive/*.csv
+data/processed/*.npy
+data/processed/*.csv
+data/monitoring/
+
+# Generated model artifacts (Random Forests with 214 classes are large)
+models/*.pkl
+models/*.joblib
+deployment/*.pkl
+
+# Generated outputs/logs/artifacts/reports
+outputs/*
+logs/*
+artifacts/*
+reports/*.json
+reports/*.csv
+
+# MLflow
+mlruns/
+mlflow.db
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Keep project directories in Git
+!models/.gitkeep
+!outputs/.gitkeep
+!logs/.gitkeep
+!artifacts/.gitkeep
+!reports/.gitkeep
+!data/processed/.gitkeep
+!data/processed/dataset_metadata.json

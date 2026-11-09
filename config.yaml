@@ -1,0 +1,70 @@
+# Labs 7-13: end-to-end MLOps pipeline for Weather Daily Summary classification
+
+data:
+  raw_path: data/raw/weatherHistory.csv
+  new_data_path: data/raw/new_weather.csv
+  archive_dir: data/raw/archive
+  processed_dir: data/processed
+  target_column: Daily Summary
+  # No customer-style ID exists, so the hourly timestamp is the row key.
+  id_column: Formatted Date
+  date_column: Formatted Date
+  dropped_columns:
+    - Loud Cover          # constant 0.0 in every row
+  numerical_features:
+    - Temperature (C)
+    - Apparent Temperature (C)
+    - Humidity
+    - Wind Speed (km/h)
+    - Wind Bearing (degrees)
+    - Visibility (km)
+    - Pressure (millibars)
+    - Year
+    - Month
+    - Day
+    - Hour
+    - DayOfWeek
+  categorical_features:
+    - Summary
+    - Precip Type
+
+split:
+  test_size: 0.2
+  random_state: 42
+
+model:
+  # 214 classes -> every leaf stores a 214-value probability vector.
+  # These limits keep the model around 40 MB instead of several GB.
+  n_estimators: 50
+  max_depth: 20
+  min_samples_leaf: 5
+  random_state: 42
+  n_jobs: -1
+
+mlflow:
+  # Leave empty for local MLflow. For GitHub Actions, set the
+  # MLFLOW_TRACKING_URI environment variable or put a server URI here.
+  tracking_uri: ""
+  experiment_name: weather_daily_summary_pipeline
+
+registry:
+  model_name: Weather_Daily_Summary_Production_Model
+  decision_metric: f1_score        # weighted F1
+
+quality_gate:
+  metric: f1_score                 # weighted F1 (multiclass, imbalanced)
+  # Baseline RF (50 trees, depth 20) scores ~0.57 weighted F1 on the fixed
+  # test set, so 0.50 rejects clearly broken models without blocking normal runs.
+  minimum_value: 0.50
+
+lab9:
+  repetitions: 3
+
+paths:
+  preprocessor: models/preprocessor.pkl
+  label_encoder: models/label_encoder.pkl
+  model: models/weather_model.pkl
+  evaluation_report: reports/evaluation_report.json
+  quality_gate_report: reports/quality_gate_report.json
+  failure_report: reports/failure_report.json
+  inference_output: outputs/inference_predictions.csv

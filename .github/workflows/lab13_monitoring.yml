@@ -1,0 +1,43 @@
+name: Lab 13 - End-to-End MLOps
+# Monitoring -> drift check -> (new batch?) -> pipeline -> promotion-gated deployment
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 * * * *"
+      timezone: "Asia/Kolkata"
+
+env:
+  # EDIT: absolute path of the project on the self-hosted runner machine.
+  PROJECT_DIR: C:\path\to\weather-daily-summary-classification
+
+jobs:
+  mlops-monitoring:
+    runs-on: [self-hosted, Windows, X64]
+
+    steps:
+      - name: Run MLOps monitoring trigger
+        shell: powershell
+        run: |
+          Set-Location "$env:PROJECT_DIR"
+          & ".\venv\Scripts\python.exe" ".\src\mlops_pipeline\12_monitor_trigger.py"
+
+      - name: Show monitoring result
+        if: always()
+        shell: powershell
+        run: |
+          Set-Location "$env:PROJECT_DIR"
+          if (Test-Path ".\outputs\monitoring\monitor_trigger_report.json") {
+              Get-Content ".\outputs\monitoring\monitor_trigger_report.json"
+          } else {
+              Write-Host "Monitoring report was not generated."
+          }
+          if (Test-Path ".\reports\lifecycle_report.json") {
+              Get-Content ".\reports\lifecycle_report.json"
+          }
+
+      - name: Verify Kubernetes
+        shell: powershell
+        run: |
+          kubectl get deployment weather-api
+          kubectl get pods -l app=weather-api

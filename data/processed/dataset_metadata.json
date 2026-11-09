@@ -1,0 +1,90 @@
+{
+    "dataset_name": "Weather History - Daily Summary Classification",
+    "target_column": "Daily Summary",
+    "n_classes": 214,
+    "rows_after_deduplication": 96429,
+    "train_shape_raw": [
+        77143,
+        11
+    ],
+    "test_shape_raw": [
+        19286,
+        11
+    ],
+    "train_shape_transformed": [
+        77143,
+        39
+    ],
+    "test_shape_transformed": [
+        19286,
+        39
+    ],
+    "numerical_features": [
+        "Temperature (C)",
+        "Apparent Temperature (C)",
+        "Humidity",
+        "Wind Speed (km/h)",
+        "Wind Bearing (degrees)",
+        "Visibility (km)",
+        "Pressure (millibars)",
+        "Year",
+        "Month",
+        "Day",
+        "Hour",
+        "DayOfWeek"
+    ],
+    "categorical_features": [
+        "Summary",
+        "Precip Type"
+    ],
+    "dropped_columns": [
+        "Loud Cover"
+    ],
+    "feature_names": [
+        "num__Temperature (C)",
+        "num__Apparent Temperature (C)",
+        "num__Humidity",
+        "num__Wind Speed (km/h)",
+        "num__Wind Bearing (degrees)",
+        "num__Visibility (km)",
+        "num__Pressure (millibars)",
+        "num__Year",
+        "num__Month",
+        "num__Day",
+        "num__Hour",
+        "num__DayOfWeek",
+        "cat__Summary_Breezy and Dry",
+        "cat__Summary_Breezy and Foggy",
+        "cat__Summary_Breezy and Mostly Cloudy",
+        "cat__Summary_Breezy and Overcast",
+        "cat__Summary_Breezy and Partly Cloudy",
+        "cat__Summary_Clear",
+        "cat__Summary_Drizzle",
+        "cat__Summary_Dry",
+        "cat__Summary_Dry and Mostly Cloudy",
+        "cat__Summary_Dry and Partly Cloudy",
+        "cat__Summary_Foggy",
+        "cat__Summary_Humid and Mostly Cloudy",
+        "cat__Summary_Humid and Overcast",
+        "cat__Summary_Humid and Partly Cloudy",
+        "cat__Summary_Light Rain",
+        "cat__Summary_Mostly Cloudy",
+        "cat__Summary_Overcast",
+        "cat__Summary_Partly Cloudy",
+        "cat__Summary_Rain",
+        "cat__Summary_Windy",
+        "cat__Summary_Windy and Dry",
+        "cat__Summary_Windy and Foggy",
+        "cat__Summary_Windy and Mostly Cloudy",
+        "cat__Summary_Windy and Overcast",
+        "cat__Summary_Windy and Partly Cloudy",
+        "cat__Precip Type_snow",
+        "cat__Precip Type_unknown"
+    ],
+    "split_test_size": 0.2,
+    "split_random_state": 42,
+    "fixed_test_set": true,
+    "test_row_keys_path": "data/processed/test_row_keys.csv",
+    "raw_train_path": "data/processed/X_train_raw.csv",
+    "raw_test_path": "data/processed/X_test_raw.csv"
+}

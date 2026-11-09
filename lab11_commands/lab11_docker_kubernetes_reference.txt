@@ -1,0 +1,58 @@
+LAB 11 - DOCKER / KUBERNETES COMMAND REFERENCE (Weather Daily Summary)
+=======================================================================
+
+# --- Prepare the deployment bundle (needs a Production model in MLflow)
+python src/mlops_pipeline/11_prepare_deployment.py
+dir deployment            # model.pkl, preprocessor.pkl, label_encoder.pkl, model_metadata.json
+
+# --- Build and run
+docker build -t weather-summary-api:1.0 .
+docker images weather-summary-api
+docker run -d -p 8000:8000 --name weather-api weather-summary-api:1.0
+docker ps
+docker logs weather-api
+
+# --- Validate the container
+curl http://localhost:8000/health
+curl http://localhost:8000/metadata
+curl -X POST http://localhost:8000/predict -H "Content-Type: application/json" -d "{\"formatted_date\": \"2016-09-09 14:00:00.000 +0200\", \"summary\": \"Partly Cloudy\", \"precip_type\": \"rain\", \"temperature_c\": 24.5, \"apparent_temperature_c\": 24.5, \"humidity\": 0.45, \"wind_speed_kmh\": 11.3, \"wind_bearing_degrees\": 200, \"visibility_km\": 15.8, \"pressure_millibars\": 1014.2}"
+
+# PowerShell alternative
+Invoke-RestMethod http://localhost:8000/health
+
+# --- Local vs container consistency
+python -m tests.test_local_vs_container
+
+# --- Inspect / debug
+docker exec -it weather-api /bin/sh
+docker exec weather-api pip freeze
+docker inspect weather-api
+docker stop weather-api
+docker rm weather-api
+
+# --- Kubernetes (Docker Desktop)
+kubectl cluster-info
+kubectl get nodes
+kubectl apply -f k8s/deployment.yaml
+kubectl apply -f k8s/service.yaml
+kubectl get deployments
+kubectl get pods -l app=weather-api
+kubectl get svc weather-api-service
+kubectl describe deployment weather-api
+kubectl logs deployment/weather-api
+kubectl port-forward service/weather-api-service 8000:8000
+
+# --- Scaling and self-healing
+kubectl scale deployment weather-api --replicas=3
+kubectl get pods -l app=weather-api
+kubectl delete pod <pod-name>
+kubectl get pods -l app=weather-api -w
+
+# --- Rollout a new model version
+python deployment/deploy_production.py
+kubectl rollout status deployment/weather-api
+kubectl rollout history deployment/weather-api
+kubectl rollout undo deployment/weather-api
+
+# --- Cleanup
+kubectl delete -f k8s/service.yaml -f k8s/deployment.yaml

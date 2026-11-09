@@ -1,0 +1,12 @@
+{
+    "model_name": "Weather_Daily_Summary_Production_Model",
+    "model_version": "1",
+    "model_stage": "Production",
+    "run_id": "6f37c640a7f542d98d54fa3ea7bd174b",
+    "model_source": "models:/m-5394ba705c474958b3c0110609561c08",
+    "model_id": "m-5394ba705c474958b3c0110609561c08",
+    "preprocessor_artifact": "preprocessing_pipeline/preprocessor.pkl",
+    "label_encoder_artifact": "preprocessing_pipeline/label_encoder.pkl",
+    "n_classes": 214,
+    "source": "MLflow"
+}
